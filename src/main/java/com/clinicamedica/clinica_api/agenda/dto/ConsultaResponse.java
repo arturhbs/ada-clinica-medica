@@ -1,5 +1,12 @@
 package com.clinicamedica.clinica_api.agenda.dto;
 
-public record ConsultaResponse() {
-    
+import java.time.LocalDateTime;
+
+public record ConsultaResponse(
+        Long id,
+        Long medicoId,
+        Long pacienteId,
+        LocalDateTime inicio,
+        LocalDateTime fim
+) {
 }
