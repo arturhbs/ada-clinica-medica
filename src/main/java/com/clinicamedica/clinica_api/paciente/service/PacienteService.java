@@ -5,6 +5,8 @@ import com.clinicamedica.clinica_api.paciente.dto.PacienteResponse;
 import com.clinicamedica.clinica_api.paciente.entity.Paciente;
 import com.clinicamedica.clinica_api.paciente.repository.PacienteRepository;
 import com.clinicamedica.clinica_api.shared.exception.BusinessException;
+import com.clinicamedica.clinica_api.shared.exception.NotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +38,7 @@ public class PacienteService {
 
     public PacienteResponse buscarPorId(Long id) {
         Paciente paciente = repository.findById(id)
-                .orElseThrow(() -> new BusinessException("Paciente não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Paciente não encontrado."));
 
         return toResponse(paciente);
     }

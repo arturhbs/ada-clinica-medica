@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: clinica-postgres
+    environment:
+      POSTGRES_DB: clinica
+      POSTGRES_USER: clinica_user
+      POSTGRES_PASSWORD: clinica_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clinica_user -d clinica"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  clinica-api:
+    build: .
+    container_name: clinica-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+
+volumes:
+  postgres_data:
