@@ -20,6 +20,8 @@ O sistema permite:
 
 ## 3. Arquitetura do Sistema
 
+![Arquitetura Sistema](/Arquitetura%20Clínica%20Médica.png)
+
 A arquitetura adotada é **Monolítica Modular por Domínio**.
 
 Apesar de ser uma aplicação monolítica (um único deploy), o código foi organizado em módulos de domínio bem definidos, de forma a reduzir acoplamento e facilitar manutenção e evolução futura. Como o caso para uma futura evolução para SOA ou Microserviços.
