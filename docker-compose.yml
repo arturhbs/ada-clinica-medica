@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   postgres:
     image: postgres:16
@@ -24,12 +22,30 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8080:8080"
+    # IMPORTANTE: não expor a API no host no projeto 2.
+    # Ela fica acessível apenas internamente para o nginx.
+    expose:
+      - "8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+
+      # Se você já tem isso no application-docker.yml, pode remover daqui.
+      # Caso não tenha, é melhor definir explicitamente:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/clinica
+      SPRING_DATASOURCE_USERNAME: clinica_user
+      SPRING_DATASOURCE_PASSWORD: clinica_pass
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: clinica-nginx
+    depends_on:
+      - clinica-api
+    ports:
+      - "80:80"
 
 volumes:
   postgres_data:
